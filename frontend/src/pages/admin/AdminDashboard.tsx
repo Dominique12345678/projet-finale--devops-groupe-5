@@ -52,7 +52,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
-      <h1 className="text-3xl font-bold text-gray-900">Dashboard Analytique</h1>
+      <h1 className="text-3xl font-black text-white tracking-tight">Dashboard <span className="text-blue-500">Analytique</span></h1>
       
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -62,11 +62,11 @@ const AdminDashboard = () => {
           { label: 'Clients', value: stats.kpis.users, icon: '👤', color: 'bg-purple-500' },
           { label: 'Produits', value: stats.kpis.products, icon: '📦', color: 'bg-orange-500' },
         ].map((kpi, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
-            <div className={`${kpi.color} text-white p-3 rounded-lg text-2xl`}>{kpi.icon}</div>
+          <div key={i} className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex items-center space-x-4 hover:border-blue-500/30 transition-all group">
+            <div className={`${kpi.color} text-white p-4 rounded-2xl text-2xl shadow-lg shadow-${kpi.color.split('-')[1]}-500/20 group-hover:scale-110 transition-transform`}>{kpi.icon}</div>
             <div>
-              <p className="text-sm text-gray-500 font-medium">{kpi.label}</p>
-              <p className="text-2xl font-bold text-gray-900">{kpi.value}</p>
+              <p className="text-sm text-gray-400 font-bold uppercase tracking-wider">{kpi.label}</p>
+              <p className="text-2xl font-black text-white">{kpi.value}</p>
             </div>
           </div>
         ))}
@@ -74,8 +74,11 @@ const AdminDashboard = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold mb-6">Évolution des Ventes</h2>
+        <div className="bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 shadow-2xl">
+          <h2 className="text-xl font-black mb-8 text-white flex items-center gap-2">
+            <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
+            Évolution des Ventes
+          </h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.charts.sales_history}>
@@ -89,8 +92,11 @@ const AdminDashboard = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold mb-6">Répartition par Catégorie</h2>
+        <div className="bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 shadow-2xl">
+          <h2 className="text-xl font-black mb-8 text-white flex items-center gap-2">
+            <div className="w-2 h-8 bg-purple-600 rounded-full"></div>
+            Répartition par Catégorie
+          </h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.charts.sales_history}>

@@ -153,7 +153,7 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="space-y-8 text-gray-900">
+    <div className="space-y-8 text-white">
       {/* Toast Notification */}
       {notification && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
@@ -165,7 +165,7 @@ const ProductManagement = () => {
       )}
 
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Gestion des Produits</h1>
+        <h1 className="text-3xl font-black text-white tracking-tight">Gestion des <span className="text-blue-500">Produits</span></h1>
         <button 
           onClick={() => {
             setShowForm(!showForm);
@@ -182,43 +182,43 @@ const ProductManagement = () => {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-4">
+        <form onSubmit={handleSubmit} className="bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-4 shadow-2xl">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Nom du produit</label>
+              <label className="block text-sm font-bold text-gray-400 mb-1">Nom du produit</label>
               <div className="relative">
-                <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input type="text" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full pl-10 pr-4 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" placeholder="ex: MacBook Pro" />
+                <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                <input type="text" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder:text-gray-600" placeholder="ex: MacBook Pro" />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Description</label>
-              <textarea required value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] text-gray-900" placeholder="Description détaillée..." />
+              <label className="block text-sm font-bold text-gray-400 mb-1">Description</label>
+              <textarea required value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full p-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] text-white placeholder:text-gray-600" placeholder="Description détaillée..." />
             </div>
           </div>
-          <div className="space-y-4 text-gray-900">
+          <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Prix (F CFA)</label>
+                <label className="block text-sm font-bold text-gray-400 mb-1">Prix (F CFA)</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs">FCFA</div>
-                  <input type="number" step="1" required value={form.price} onChange={e => setForm({...form, price: e.target.value})} className="w-full pl-14 pr-4 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-xs uppercase">FCFA</div>
+                  <input type="number" step="1" required value={form.price} onChange={e => setForm({...form, price: e.target.value})} className="w-full pl-14 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-white" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Stock</label>
-                <input type="number" required value={form.stock} onChange={e => setForm({...form, stock: e.target.value})} className="w-full px-4 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" />
+                <label className="block text-sm font-bold text-gray-400 mb-1">Stock</label>
+                <input type="number" required value={form.stock} onChange={e => setForm({...form, stock: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-white" />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Catégorie</label>
+              <label className="block text-sm font-bold text-gray-400 mb-1">Catégorie</label>
               <div className="relative">
-                <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <select 
                   required 
                   value={form.category} 
                   onChange={e => setForm({...form, category: e.target.value})} 
-                  className="w-full pl-10 pr-4 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 bg-white appearance-none text-gray-900"
+                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-white appearance-none cursor-pointer [&>option]:bg-[#030303] [&>option]:text-white"
                 >
                   <option value="">Sélectionner une catégorie</option>
                   {categories.map(cat => (
@@ -266,46 +266,49 @@ const ProductManagement = () => {
                 )}
               </div>
             </div>
-            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all">
+            <button type="submit" className="w-full bg-blue-600 text-white py-4 rounded-xl font-black hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20">
               Enregistrer le produit
             </button>
           </div>
         </form>
       )}
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      {/* Table Section */}
+      <div className="bg-white/5 backdrop-blur-md rounded-[32px] border border-white/10 overflow-hidden shadow-2xl">
         <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b border-gray-100">
+          <thead className="bg-white/5 border-b border-white/10">
             <tr>
-              <th className="p-4 font-bold text-gray-600">Produit</th>
-              <th className="p-4 font-bold text-gray-600">Catégorie</th>
-              <th className="p-4 font-bold text-gray-600">Prix</th>
-              <th className="p-4 font-bold text-gray-600">Stock</th>
-              <th className="p-4 font-bold text-gray-600 text-right">Actions</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Produit</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Catégorie</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Prix</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Stock</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-white/5">
             {products.map(product => (
-              <tr key={product.id} className="hover:bg-gray-50/50 transition-colors">
-                <td className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden">
+              <tr key={product.id} className="hover:bg-white/5 transition-colors group">
+                <td className="p-5 flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white/10 rounded-2xl overflow-hidden border border-white/10 group-hover:scale-110 transition-transform">
                     <img src={product.image_url || 'https://via.placeholder.com/40'} alt="" className="w-full h-full object-cover" />
                   </div>
-                  <span className="font-bold text-gray-900">{product.name}</span>
+                  <span className="font-black text-white group-hover:text-blue-400 transition-colors">{product.name}</span>
                 </td>
-                <td className="p-4 text-gray-600 text-sm">{product.category}</td>
-                <td className="p-4 font-bold">{product.price.toLocaleString()} F CFA</td>
-                <td className="p-4">
-                  <span className={`px-2 py-1 rounded-lg text-xs font-bold ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {product.stock} en stock
+                <td className="p-5">
+                  <span className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[10px] font-black border border-blue-500/20 uppercase tracking-tighter">{product.category}</span>
+                </td>
+                <td className="p-5 font-black text-white">{product.price.toLocaleString()} FCFA</td>
+                <td className="p-5">
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border ${product.stock > 0 ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
+                    {product.stock} DISPO
                   </span>
                 </td>
-                <td className="p-4 text-right space-x-2">
-                  <button onClick={() => handleEdit(product)} className="text-blue-500 hover:bg-blue-50 p-2 rounded-lg transition-colors">
-                    <Edit2 size={20} />
+                <td className="p-5 text-right space-x-2">
+                  <button onClick={() => handleEdit(product)} className="text-blue-400 hover:bg-blue-500/20 p-2.5 rounded-xl transition-all">
+                    <Edit2 size={18} />
                   </button>
-                  <button onClick={() => setProductToDelete(product.id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors">
-                    <Trash2 size={20} />
+                  <button onClick={() => setProductToDelete(product.id)} className="text-red-400 hover:bg-red-500/20 p-2.5 rounded-xl transition-all">
+                    <Trash2 size={18} />
                   </button>
                 </td>
               </tr>
@@ -316,16 +319,16 @@ const ProductManagement = () => {
 
       {/* Delete Confirmation Modal */}
       {productToDelete && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
-          <div className="bg-white p-8 rounded-[32px] shadow-2xl max-w-sm w-full text-center border border-gray-100 animate-in zoom-in-95 duration-200">
-            <div className="bg-red-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <Trash2 size={40} className="text-red-500" />
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
+          <div className="bg-[#0a0a0a] p-8 rounded-[40px] shadow-2xl max-w-sm w-full text-center border border-white/10 animate-in zoom-in-95 duration-200">
+            <div className="bg-red-500/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+              <Trash2 size={48} className="text-red-500" />
             </div>
-            <h3 className="text-2xl font-black text-gray-900 mb-4">Supprimer ?</h3>
-            <p className="text-gray-500 mb-8 leading-relaxed">Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.</p>
+            <h3 className="text-2xl font-black text-white mb-4 tracking-tight uppercase">Supprimer ?</h3>
+            <p className="text-gray-400 mb-8 leading-relaxed font-medium">Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.</p>
             <div className="flex gap-4">
-              <button onClick={() => setProductToDelete(null)} className="flex-1 px-6 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all">Annuler</button>
-              <button onClick={() => handleDelete(productToDelete)} className="flex-1 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200">Supprimer</button>
+              <button onClick={() => setProductToDelete(null)} className="flex-1 px-6 py-4 bg-white/5 text-gray-500 rounded-2xl font-black hover:bg-white/10 transition-all">Annuler</button>
+              <button onClick={() => handleDelete(productToDelete)} className="flex-1 px-6 py-4 bg-red-600 text-white rounded-2xl font-black hover:bg-red-700 transition-all shadow-lg shadow-red-600/20">Supprimer</button>
             </div>
           </div>
         </div>

@@ -58,89 +58,99 @@ const CategoryManagement = () => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 text-gray-900">
+    <div className="bg-white/5 backdrop-blur-md p-8 rounded-[40px] border border-white/10 text-white shadow-2xl relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-600/10 blur-[80px] -z-10 rounded-full"></div>
+      
       {/* Toast Notification */}
       {notification && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
-          <div className={`${notification.type === 'error' ? 'bg-red-600' : 'bg-green-600'} text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 font-bold border-2 border-white/20 backdrop-blur-md`}>
+          <div className={`${notification.type === 'error' ? 'bg-red-600' : 'bg-green-600'} text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 font-black border-2 border-white/20 backdrop-blur-md`}>
             <CheckCircle size={20} />
             {notification.message}
           </div>
         </div>
       )}
 
-      <h2 className="text-2xl font-black mb-6 text-gray-900">Gestion des Catégories</h2>
+      <h2 className="text-3xl font-black mb-8 text-white tracking-tight flex items-center gap-3">
+        <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-600/20">
+          <Tag size={24} />
+        </div>
+        Gestion des <span className="text-blue-500">Catégories</span>
+      </h2>
       
-      <form onSubmit={handleSubmit} className="flex gap-4 mb-8">
+      <form onSubmit={handleSubmit} className="flex gap-4 mb-10">
         <div className="relative flex-1">
-          <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+          <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input 
             type="text" 
             value={newName} 
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Nom de la catégorie..."
-            className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-900"
+            className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-white placeholder:text-gray-600 font-medium"
             required
           />
         </div>
-        <button className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">
+        <button className="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-95">
           {editingId ? 'Modifier' : 'Ajouter'}
         </button>
         {editingId && (
           <button 
             type="button" 
             onClick={() => { setEditingId(null); setNewName(''); }}
-            className="bg-gray-100 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-200"
+            className="bg-white/5 text-gray-400 px-8 py-4 rounded-2xl font-black hover:bg-white/10 border border-white/5"
           >
             Annuler
           </button>
         )}
       </form>
 
-      <table className="w-full">
-        <thead className="bg-gray-50 text-left">
-          <tr>
-            <th className="p-4 text-gray-600">Nom</th>
-            <th className="p-4 text-gray-600 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map(cat => (
-            <tr key={cat.id} className="border-t hover:bg-gray-50/50 transition-colors">
-              <td className="p-4 font-bold text-gray-900">{cat.name}</td>
-              <td className="p-4 text-right space-x-2">
-                <button 
-                  onClick={() => handleEdit(cat)}
-                  className="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors inline-flex items-center gap-1"
-                >
-                  <Edit2 size={18} />
-                  <span className="text-sm">Modifier</span>
-                </button>
-                <button 
-                  onClick={() => setShowConfirm(cat.id)}
-                  className="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors inline-flex items-center gap-1"
-                >
-                  <Trash2 size={18} />
-                  <span className="text-sm">Supprimer</span>
-                </button>
-              </td>
+      <div className="bg-white/5 rounded-[32px] border border-white/10 overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-white/5 text-left">
+              <th className="p-5 text-gray-400 font-black uppercase text-xs tracking-widest">Nom de la Catégorie</th>
+              <th className="p-5 text-gray-400 font-black uppercase text-xs tracking-widest text-right">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {categories.map(cat => (
+              <tr key={cat.id} className="hover:bg-white/5 transition-colors group">
+                <td className="p-5 font-black text-white group-hover:text-blue-400 transition-colors">{cat.name}</td>
+                <td className="p-5 text-right space-x-2">
+                  <button 
+                    onClick={() => handleEdit(cat)}
+                    className="text-blue-400 hover:bg-blue-500/20 p-2.5 rounded-xl transition-all inline-flex items-center gap-2 group/btn"
+                  >
+                    <Edit2 size={18} />
+                    <span className="text-xs font-black uppercase tracking-tighter">Modifier</span>
+                  </button>
+                  <button 
+                    onClick={() => setShowConfirm(cat.id)}
+                    className="text-red-400 hover:bg-red-500/20 p-2.5 rounded-xl transition-all inline-flex items-center gap-2 group/btn"
+                  >
+                    <Trash2 size={18} />
+                    <span className="text-xs font-black uppercase tracking-tighter">Supprimer</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Confirmation Popup */}
       {showConfirm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
-          <div className="bg-white p-8 rounded-[32px] shadow-2xl max-w-sm w-full text-center border border-gray-100 animate-in zoom-in-95 duration-200">
-            <div className="bg-red-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <AlertCircle size={40} className="text-red-500" />
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
+          <div className="bg-[#0a0a0a] p-8 rounded-[40px] shadow-2xl max-w-sm w-full text-center border border-white/10 animate-in zoom-in-95 duration-200">
+            <div className="bg-red-500/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+              <AlertCircle size={48} className="text-red-500" />
             </div>
-            <h3 className="text-2xl font-black text-gray-900 mb-4">Supprimer ?</h3>
-            <p className="text-gray-500 mb-8 leading-relaxed">Voulez-vous vraiment supprimer cette catégorie ? Cette action est irréversible.</p>
+            <h3 className="text-2xl font-black text-white mb-4 tracking-tight uppercase">Supprimer ?</h3>
+            <p className="text-gray-400 mb-8 leading-relaxed font-medium">Voulez-vous vraiment supprimer cette catégorie ? Cette action est irréversible.</p>
             <div className="flex gap-4">
-              <button onClick={() => setShowConfirm(null)} className="flex-1 px-6 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all">Annuler</button>
-              <button onClick={() => handleDelete(showConfirm)} className="flex-1 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200">Supprimer</button>
+              <button onClick={() => setShowConfirm(null)} className="flex-1 px-6 py-4 bg-white/5 text-gray-500 rounded-2xl font-black hover:bg-white/10 transition-all">Annuler</button>
+              <button onClick={() => handleDelete(showConfirm)} className="flex-1 px-6 py-4 bg-red-600 text-white rounded-2xl font-black hover:bg-red-700 transition-all shadow-lg shadow-red-600/20">Supprimer</button>
             </div>
           </div>
         </div>
