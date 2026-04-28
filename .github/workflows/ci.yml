@@ -37,6 +37,7 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/ecommerce
+          PYTHONPATH: .
         run: |
           cd backend
           pytest
