@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '../../context/ThemeContext';
-import { FileText, Calendar, CreditCard, Hash } from 'lucide-react';
+import { FileText, Calendar, Hash } from 'lucide-react';
 
 interface Invoice { id: number; user_id: number; total_amount: number; status: string; created_at: string; }
 
