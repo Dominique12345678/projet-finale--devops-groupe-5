@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Save, Trash2, AlertCircle } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const Profile = () => {
   const [user, setUser] = useState({ email: '', full_name: '' });
@@ -9,6 +10,7 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const userId = localStorage.getItem('user_id');
 
   useEffect(() => {
@@ -64,78 +66,95 @@ const Profile = () => {
   if (loading) return <div className="text-center py-20 font-bold">Chargement...</div>;
 
   return (
-    <div className="max-w-2xl mx-auto py-10">
-      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-        <div className="bg-blue-600 p-8 text-white">
-          <div className="flex items-center gap-4">
-            <div className="bg-white/20 p-4 rounded-2xl backdrop-blur-md">
-              <User size={40} />
+    <div className={`max-w-2xl mx-auto py-10 transition-colors duration-500`}>
+      <div className={`rounded-[40px] shadow-2xl overflow-hidden border transition-all duration-500 ${
+        theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-gray-100 shadow-xl'
+      }`}>
+        <div className="bg-blue-600 p-10 text-white relative overflow-hidden">
+          {/* Decorative glow */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-3xl rounded-full"></div>
+          
+          <div className="flex items-center gap-6 relative z-10">
+            <div className="bg-white/20 p-5 rounded-[24px] backdrop-blur-md shadow-xl border border-white/10">
+              <User size={48} />
             </div>
             <div>
-              <h1 className="text-3xl font-black">Mon Compte</h1>
-              <p className="text-blue-100 opacity-80">Gérez vos informations personnelles</p>
+              <h1 className="text-4xl font-black tracking-tight">Mon <span className="text-blue-100 opacity-80 font-medium">Compte</span></h1>
+              <p className="text-blue-100/60 font-medium mt-1">Gérez vos informations personnelles</p>
             </div>
           </div>
         </div>
 
-        <div className="p-8">
+        <div className="p-10">
           {error && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 flex items-center gap-3 border border-red-100">
+            <div className={`p-4 rounded-2xl mb-8 flex items-center gap-3 border animate-in slide-in-from-top-2 ${
+              theme === 'dark' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-red-50 text-red-600 border-red-100'
+            }`}>
               <AlertCircle size={20} />
-              <span className="font-semibold">{error}</span>
+              <span className="font-bold">{error}</span>
             </div>
           )}
           {success && (
-            <div className="bg-green-50 text-green-600 p-4 rounded-xl mb-6 flex items-center gap-3 border border-green-100">
+            <div className={`p-4 rounded-2xl mb-8 flex items-center gap-3 border animate-in slide-in-from-top-2 ${
+              theme === 'dark' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-green-50 text-green-600 border-green-100'
+            }`}>
               <AlertCircle size={20} />
-              <span className="font-semibold">{success}</span>
+              <span className="font-bold">{success}</span>
             </div>
           )}
 
-          <form onSubmit={handleUpdate} className="space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Nom Complet</label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <form onSubmit={handleUpdate} className="space-y-8">
+            <div className="space-y-2">
+              <label className={`block text-xs font-black uppercase tracking-widest ml-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Nom Complet</label>
+              <div className="relative group">
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-blue-500 transition-colors" size={20} />
                 <input
                   type="text"
                   value={user.full_name}
                   onChange={(e) => setUser({ ...user, full_name: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                  className={`w-full pl-14 pr-6 py-4 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-medium ${
+                    theme === 'dark' ? 'bg-white/5 border border-white/10 text-white placeholder:text-gray-600' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder:text-gray-400'
+                  }`}
+                  placeholder="Votre nom"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Adresse Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <div className="space-y-2">
+              <label className={`block text-xs font-black uppercase tracking-widest ml-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Adresse Email</label>
+              <div className="relative group">
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-blue-500 transition-colors" size={20} />
                 <input
                   type="email"
                   value={user.email}
                   onChange={(e) => setUser({ ...user, email: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                  className={`w-full pl-14 pr-6 py-4 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-medium ${
+                    theme === 'dark' ? 'bg-white/5 border border-white/10 text-white placeholder:text-gray-600' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder:text-gray-400'
+                  }`}
+                  placeholder="votre@email.com"
                   required
                 />
               </div>
             </div>
 
-            <div className="pt-4 flex flex-col sm:flex-row gap-4">
+            <div className="pt-6 flex flex-col sm:flex-row gap-4">
               <button
                 type="submit"
-                className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2"
+                className="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-3 active:scale-95"
               >
                 <Save size={20} />
-                Sauvegarder les modifications
+                Enregistrer
               </button>
               <button
                 type="button"
                 onClick={handleDelete}
-                className="bg-red-50 text-red-600 py-3 px-6 rounded-xl font-bold hover:bg-red-100 transition-all border border-red-100 flex items-center justify-center gap-2"
+                className={`py-4 px-8 rounded-2xl font-black transition-all border flex items-center justify-center gap-3 active:scale-95 ${
+                  theme === 'dark' ? 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20' : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
+                }`}
               >
                 <Trash2 size={20} />
-                Supprimer le compte
+                Supprimer
               </button>
             </div>
           </form>

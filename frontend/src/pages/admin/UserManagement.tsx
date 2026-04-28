@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeContext';
+import { User as UserIcon, Shield, Mail } from 'lucide-react';
 
 interface User { 
   id: number; 
@@ -12,6 +13,7 @@ interface User {
 
 const UserManagement = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const { theme } = useTheme();
 
   const fetchUsers = () => {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
@@ -27,28 +29,44 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-      <h2 className="text-2xl font-bold mb-6">Gestion des Utilisateurs</h2>
-      <table className="w-full">
-        <thead className="bg-gray-50 text-left">
-          <tr>
-            <th className="p-4 text-gray-600">Utilisateur</th>
-            <th className="p-4 text-gray-600">Statut</th>
-            <th className="p-4 text-gray-600 text-right">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user.id} className="border-t">
-              <td className="p-4">
-                <p className="font-bold">{user.full_name || 'Sans nom'}</p>
-                <div className="flex items-center gap-2">
-                  <p className="text-sm text-gray-500">{user.email}</p>
-                  {user.google_id && (
-                    <span className="bg-blue-50 text-blue-600 text-[10px] px-1.5 py-0.5 rounded border border-blue-100 font-bold uppercase">Google</span>
-                  )}
-                </div>
-              </td>
+    <div className={`backdrop-blur-md p-8 rounded-[32px] border shadow-2xl transition-all duration-500 ${
+      theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'
+    }`}>
+      <h2 className={`text-3xl font-black mb-8 tracking-tight flex items-center gap-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+        <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-600/20 text-white">
+          <Shield size={24} />
+        </div>
+        Gestion des <span className="text-blue-500">Utilisateurs</span>
+      </h2>
+      <div className={`rounded-2xl border overflow-hidden ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'}`}>
+        <table className="w-full">
+          <thead className={`text-left ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+            <tr>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Utilisateur</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Statut</th>
+              <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${theme === 'dark' ? 'divide-white/5' : 'divide-gray-100'}`}>
+            {users.map(user => (
+              <tr key={user.id} className={`transition-colors ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-50'}`}>
+                <td className="p-5">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-600'}`}>
+                      <UserIcon size={20} />
+                    </div>
+                    <div>
+                      <p className={`font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{user.full_name || 'Sans nom'}</p>
+                      <div className="flex items-center gap-2">
+                        <Mail size={12} className="text-gray-500" />
+                        <p className="text-xs text-gray-500 font-medium">{user.email}</p>
+                        {user.google_id && (
+                          <span className="bg-blue-500/10 text-blue-400 text-[10px] px-1.5 py-0.5 rounded border border-blue-500/20 font-black uppercase tracking-tighter">Google</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </td>
               <td className="p-4">
                 <span className={`px-3 py-1 rounded-full text-xs font-bold ${user.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                   {user.is_active ? 'Actif' : 'Désactivé'}

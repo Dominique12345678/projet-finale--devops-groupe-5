@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { Search, ShoppingCart, Loader2, CheckCircle, Package } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 interface Product {
   id: number;
@@ -23,6 +24,7 @@ const Products = () => {
   const { addToCart, cart } = useCart();
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (location.state?.message) {
@@ -83,7 +85,9 @@ const Products = () => {
   );
 
   return (
-    <div className="min-h-screen tech-gradient pb-20 pt-10 px-6">
+    <div className={`min-h-screen pb-20 pt-10 px-6 transition-colors duration-500 ${
+      theme === 'dark' ? 'bg-[#030303]' : 'bg-gray-50'
+    }`}>
       {/* Toast Notification */}
       {notification && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
@@ -97,12 +101,18 @@ const Products = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-4">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold mb-4 transition-colors ${
+              theme === 'dark' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
+            }`}>
               <Package size={14} />
               <span>Catalogue Tech</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">Explorez nos <span className="text-blue-500">Produits</span></h1>
-            <p className="text-gray-400 mt-4 max-w-lg">Le meilleur de la technologie sélectionné pour vous avec rigueur et passion.</p>
+            <h1 className={`text-4xl md:text-5xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              Explorez nos <span className="text-blue-500">Produits</span>
+            </h1>
+            <p className={`mt-4 max-w-lg font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+              Le meilleur de la technologie sélectionné pour vous avec rigueur et passion.
+            </p>
           </div>
           
           {/* Barre de Recherche Tech */}
@@ -120,7 +130,9 @@ const Products = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="glass-dark rounded-[32px] border-white/5 overflow-hidden hover:border-blue-500/30 transition-all duration-500 group flex flex-col">
+            <div key={product.id} className={`rounded-[32px] overflow-hidden border transition-all duration-500 group flex flex-col shadow-2xl ${
+              theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-blue-500/30' : 'bg-white border-gray-100 hover:border-blue-500 hover:shadow-blue-500/10'
+            }`}>
               <div className="h-64 bg-black/40 flex items-center justify-center relative overflow-hidden">
                 {product.image_url ? (
                   <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100" />
@@ -135,13 +147,13 @@ const Products = () => {
               </div>
               
               <div className="p-8 flex flex-col flex-1">
-                <h2 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors mb-2">{product.name}</h2>
-                <p className="text-gray-500 text-sm line-clamp-2 mb-8 flex-1 leading-relaxed">{product.description}</p>
+                <h2 className={`text-xl font-black group-hover:text-blue-400 transition-colors mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{product.name}</h2>
+                <p className={`text-sm line-clamp-2 mb-8 flex-1 leading-relaxed font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>{product.description}</p>
                 
                 <div className="flex items-center justify-between mt-auto">
                   <div>
-                    <p className="text-[10px] text-gray-500 font-black uppercase tracking-tighter mb-1">Investissement</p>
-                    <p className="text-2xl font-black text-white">{product.price.toLocaleString()} <span className="text-blue-500 text-sm">FCFA</span></p>
+                    <p className={`text-[10px] font-black uppercase tracking-tighter mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Investissement</p>
+                    <p className={`text-2xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{product.price.toLocaleString()} <span className="text-blue-500 text-sm">FCFA</span></p>
                   </div>
                   <button 
                     onClick={() => handleAddToCart(product)}

@@ -57,30 +57,41 @@ const AdminLayout = () => {
         md:flex flex-col w-full md:w-64 bg-gray-900 text-white p-6 space-y-8 sticky top-0 h-screen z-40
       `}>
         <h2 className="hidden md:block text-2xl font-black text-blue-400 tracking-tighter text-center">TECHSHOP <span className="text-white">ADMIN</span></h2>
-        <nav className="space-y-1 flex-1">
-          {menuItems.map((item, i) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <Link 
-                key={i} 
-                to={item.path} 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group border-2 ${
-                  isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 border-blue-400' : 'hover:bg-white/10 text-gray-300 border-transparent'
-                }`}
-              >
-                <span className={`${isActive ? 'text-white' : 'text-gray-400 group-hover:text-blue-400'} transition-colors`}>{item.icon}</span>
-                <span className="font-semibold text-sm">{item.label}</span>
-              </Link>
-            );
-          })}
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          <div className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4 ml-3 opacity-50">Navigation</div>
+          {menuItems.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => { navigate(item.path); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center space-x-3 p-3.5 rounded-2xl transition-all duration-300 group ${
+                location.pathname === item.path
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-black'
+                  : theme === 'dark'
+                    ? 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+              }`}
+            >
+              <div className={`${location.pathname === item.path ? 'scale-110' : 'group-hover:scale-110 transition-transform'}`}>
+                {item.icon}
+              </div>
+              <span className="text-sm tracking-tight">{item.label}</span>
+            </button>
+          ))}
+
+          <div className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mt-8 mb-4 ml-3 opacity-50">Paramètres</div>
           
           <button 
             onClick={toggleTheme}
-            className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-blue-500/10 text-blue-400 transition-all duration-200 mt-4 group"
+            className={`w-full flex items-center space-x-3 p-3.5 rounded-2xl transition-all duration-300 group border-2 ${
+              theme === 'dark' 
+                ? 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10 hover:text-white' 
+                : 'bg-gray-50 border-gray-100 text-gray-600 hover:bg-white hover:shadow-md'
+            }`}
           >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            <span className="font-bold text-sm">Mode {theme === 'dark' ? 'Clair' : 'Sombre'}</span>
+            <div className="group-hover:rotate-12 transition-transform">
+              {theme === 'dark' ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-blue-600" />}
+            </div>
+            <span className="font-black text-sm tracking-tight">Mode {theme === 'dark' ? 'Clair' : 'Sombre'}</span>
           </button>
 
           <button 
