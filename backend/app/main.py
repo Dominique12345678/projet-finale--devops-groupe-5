@@ -7,6 +7,7 @@ import shutil
 import os
 from pathlib import Path
 
+from contextlib import asynccontextmanager
 from . import models, schemas, database, seed
 from .database import engine, get_db
 
@@ -15,10 +16,8 @@ models.Base.metadata.create_all(bind=engine)
 
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="E-commerce API", version="1.0.0")
-
-@app.on_event("startup")
-def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     db = next(get_db())
     try:
         # Check if any user exists, if not seed the database
@@ -27,6 +26,9 @@ def startup_event():
             seed.seed_db()
     finally:
         db.close()
+    yield
+
+app = FastAPI(title="E-commerce API", version="1.0.0", lifespan=lifespan)
 
 # Add CORS middleware
 app.add_middleware(

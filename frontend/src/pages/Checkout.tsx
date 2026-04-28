@@ -63,36 +63,36 @@ const Checkout = () => {
 
   return (
     <div className="max-w-5xl mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Paiement</h1>
+      <h1 className="text-3xl font-bold mb-8 text-white">Paiement</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Payment Info */}
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-black">
               <Lock size={18} className="text-green-600" /> Paiement sécurisé (simulation)
             </h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Numéro de carte</label>
+                <label className="block text-sm font-medium text-black mb-1">Numéro de carte</label>
                 <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456"
                   value={form.cardNumber} onChange={handleChange} required maxLength={19}
-                  className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-black"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date d'expiration</label>
+                  <label className="block text-sm font-medium text-black mb-1">Date d'expiration</label>
                   <input type="text" name="expiry" placeholder="MM/AA"
                     value={form.expiry} onChange={handleChange} required maxLength={5}
-                    className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-black"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+                  <label className="block text-sm font-medium text-black mb-1">CVV</label>
                   <input type="text" name="cvv" placeholder="123"
                     value={form.cvv} onChange={handleChange} required maxLength={3}
-                    className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-black"
                   />
                 </div>
               </div>
@@ -106,17 +106,17 @@ const Checkout = () => {
         </form>
 
         {/* Order Summary */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit">
-          <h2 className="text-lg font-bold mb-4">Résumé de la commande</h2>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit text-black">
+          <h2 className="text-lg font-bold mb-4 text-black">Résumé de la commande</h2>
           <div className="space-y-3 mb-6">
             {cart.map(item => (
               <div key={item.id} className="flex justify-between text-sm">
-                <span className="text-gray-700">{item.name} × {item.quantity}</span>
-                <span className="font-medium">{(item.price * item.quantity).toLocaleString()} F CFA</span>
+                <span className="text-black">{item.name} × {item.quantity}</span>
+                <span className="font-medium text-black">{(item.price * item.quantity).toLocaleString()} F CFA</span>
               </div>
             ))}
           </div>
-          <div className="border-t pt-4 flex justify-between font-bold text-lg">
+          <div className="border-t pt-4 flex justify-between font-bold text-lg text-black">
             <span>Total</span><span>{total.toLocaleString()} F CFA</span>
           </div>
         </div>

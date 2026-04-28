@@ -27,8 +27,10 @@ jobs:
           ECR_REPOSITORY: ecommerce-backend
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infrastructure/docker/backend.Dockerfile .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infrastructure/docker/backend.Dockerfile backend
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Build, tag, and push Frontend image to Amazon ECR
         env:
@@ -36,7 +38,12 @@ jobs:
           ECR_REPOSITORY: ecommerce-frontend
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infrastructure/docker/frontend.Dockerfile .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infrastructure/docker/frontend.Dockerfile frontend
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-      # Here you would typically add steps to update ECS service or Terraform apply
+      - name: Update ECS Services
+        run: |
+          aws ecs update-service --cluster ecommerce-cluster --service ecommerce-backend-service --force-new-deployment
+          aws ecs update-service --cluster ecommerce-cluster --service ecommerce-frontend-service --force-new-deployment

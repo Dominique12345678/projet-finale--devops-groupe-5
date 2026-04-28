@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -18,8 +18,7 @@ class Product(ProductBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # --- USER SCHEMAS ---
 class UserBase(BaseModel):
@@ -39,8 +38,7 @@ class User(UserBase):
     is_active: int
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # --- CATEGORY SCHEMAS ---
 class CategoryBase(BaseModel):
@@ -52,8 +50,7 @@ class CategoryCreate(CategoryBase):
 
 class Category(CategoryBase):
     id: int
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # --- INVOICE SCHEMAS ---
 class InvoiceCreate(BaseModel):
@@ -66,8 +63,7 @@ class Invoice(BaseModel):
     total_amount: float
     status: str
     created_at: datetime
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # --- AUTH SCHEMAS ---
 class Token(BaseModel):
