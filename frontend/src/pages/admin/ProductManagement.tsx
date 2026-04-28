@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Plus, Trash2, Package, Tag, Image as ImageIcon, Edit2, X } from 'lucide-react';
+import { Plus, Trash2, Package, Tag, Image as ImageIcon, Edit2, X, CheckCircle } from 'lucide-react';
 
 interface Product {
   id: number;
