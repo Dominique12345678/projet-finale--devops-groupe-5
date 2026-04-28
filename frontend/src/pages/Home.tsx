@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Zap, ShieldCheck, Gem, Cpu } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 

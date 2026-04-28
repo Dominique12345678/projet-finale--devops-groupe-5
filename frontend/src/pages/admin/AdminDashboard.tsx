@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle, TrendingUp, DollarSign, Users as UsersIcon, Package as PackageIcon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
