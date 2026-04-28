@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, TrendingUp, DollarSign, Users as UsersIcon, Package as PackageIcon } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 interface Stats {
@@ -14,6 +14,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
   const location = useLocation();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (location.state?.message) {
@@ -52,7 +53,9 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
-      <h1 className="text-3xl font-black text-white tracking-tight">Dashboard <span className="text-blue-500">Analytique</span></h1>
+      <h1 className={`text-3xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+        Dashboard <span className="text-blue-500">Analytique</span>
+      </h1>
       
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -62,11 +65,15 @@ const AdminDashboard = () => {
           { label: 'Clients', value: stats.kpis.users, icon: '👤', color: 'bg-purple-500' },
           { label: 'Produits', value: stats.kpis.products, icon: '📦', color: 'bg-orange-500' },
         ].map((kpi, i) => (
-          <div key={i} className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 flex items-center space-x-4 hover:border-blue-500/30 transition-all group">
+          <div key={i} className={`backdrop-blur-md p-6 rounded-3xl border transition-all group ${
+            theme === 'dark' 
+              ? 'bg-white/5 border-white/10 hover:border-blue-500/30 shadow-2xl' 
+              : 'bg-white border-gray-200 hover:border-blue-500 shadow-sm'
+          }`}>
             <div className={`${kpi.color} text-white p-4 rounded-2xl text-2xl shadow-lg shadow-${kpi.color.split('-')[1]}-500/20 group-hover:scale-110 transition-transform`}>{kpi.icon}</div>
             <div>
-              <p className="text-sm text-gray-400 font-bold uppercase tracking-wider">{kpi.label}</p>
-              <p className="text-2xl font-black text-white">{kpi.value}</p>
+              <p className={`text-sm font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{kpi.label}</p>
+              <p className={`text-2xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{kpi.value}</p>
             </div>
           </div>
         ))}
@@ -74,8 +81,10 @@ const AdminDashboard = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 shadow-2xl">
-          <h2 className="text-xl font-black mb-8 text-white flex items-center gap-2">
+        <div className={`backdrop-blur-md p-8 rounded-[32px] border shadow-2xl transition-colors duration-500 ${
+          theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200'
+        }`}>
+          <h2 className={`text-xl font-black mb-8 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
             <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
             Évolution des Ventes
           </h2>
@@ -92,8 +101,10 @@ const AdminDashboard = () => {
           </div>
         </div>
         
-        <div className="bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 shadow-2xl">
-          <h2 className="text-xl font-black mb-8 text-white flex items-center gap-2">
+        <div className={`backdrop-blur-md p-8 rounded-[32px] border shadow-2xl transition-colors duration-500 ${
+          theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200'
+        }`}>
+          <h2 className={`text-xl font-black mb-8 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
             <div className="w-2 h-8 bg-purple-600 rounded-full"></div>
             Répartition par Catégorie
           </h2>

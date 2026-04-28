@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Trash2, Package, Tag, Image as ImageIcon, Edit2, X, CheckCircle } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Product {
   id: number;
@@ -25,6 +26,7 @@ const ProductManagement = () => {
   const [dragActive, setDragActive] = useState(false);
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const [productToDelete, setProductToDelete] = useState<number | null>(null);
+  const { theme } = useTheme();
 
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
@@ -153,7 +155,7 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="space-y-8 text-white">
+    <div className={`space-y-8 transition-colors duration-500 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
       {/* Toast Notification */}
       {notification && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
@@ -165,7 +167,9 @@ const ProductManagement = () => {
       )}
 
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-black text-white tracking-tight">Gestion des <span className="text-blue-500">Produits</span></h1>
+        <h1 className={`text-3xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+          Gestion des <span className="text-blue-500">Produits</span>
+        </h1>
         <button 
           onClick={() => {
             setShowForm(!showForm);
@@ -182,13 +186,17 @@ const ProductManagement = () => {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-4 shadow-2xl">
+        <form onSubmit={handleSubmit} className={`backdrop-blur-md p-8 rounded-[32px] border grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-4 shadow-2xl transition-colors duration-500 ${
+          theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200'
+        }`}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-bold text-gray-400 mb-1">Nom du produit</label>
               <div className="relative">
                 <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                <input type="text" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder:text-gray-600" placeholder="ex: MacBook Pro" />
+                <input type="text" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className={`w-full pl-10 pr-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                  theme === 'dark' ? 'bg-white/5 border-white/10 text-white placeholder:text-gray-600' : 'bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400'
+                }`} placeholder="ex: MacBook Pro" />
               </div>
             </div>
             <div>
@@ -274,9 +282,11 @@ const ProductManagement = () => {
       )}
 
       {/* Table Section */}
-      <div className="bg-white/5 backdrop-blur-md rounded-[32px] border border-white/10 overflow-hidden shadow-2xl">
+      <div className={`backdrop-blur-md rounded-[32px] border overflow-hidden shadow-2xl transition-colors duration-500 ${
+        theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200'
+      }`}>
         <table className="w-full text-left">
-          <thead className="bg-white/5 border-b border-white/10">
+          <thead className={`border-b transition-colors ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-100'}`}>
             <tr>
               <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Produit</th>
               <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest">Catégorie</th>
@@ -285,29 +295,31 @@ const ProductManagement = () => {
               <th className="p-5 font-black text-gray-400 uppercase text-xs tracking-widest text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className={`divide-y transition-colors ${theme === 'dark' ? 'divide-white/5' : 'divide-gray-100'}`}>
             {products.map(product => (
-              <tr key={product.id} className="hover:bg-white/5 transition-colors group">
+              <tr key={product.id} className={`transition-colors group ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-50'}`}>
                 <td className="p-5 flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-2xl overflow-hidden border border-white/10 group-hover:scale-110 transition-transform">
+                  <div className={`w-12 h-12 rounded-2xl overflow-hidden border transition-all group-hover:scale-110 ${
+                    theme === 'dark' ? 'bg-white/10 border-white/10' : 'bg-gray-100 border-gray-200'
+                  }`}>
                     <img src={product.image_url || 'https://via.placeholder.com/40'} alt="" className="w-full h-full object-cover" />
                   </div>
-                  <span className="font-black text-white group-hover:text-blue-400 transition-colors">{product.name}</span>
+                  <span className={`font-black transition-colors ${theme === 'dark' ? 'text-white group-hover:text-blue-400' : 'text-gray-900 group-hover:text-blue-600'}`}>{product.name}</span>
                 </td>
                 <td className="p-5">
                   <span className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[10px] font-black border border-blue-500/20 uppercase tracking-tighter">{product.category}</span>
                 </td>
-                <td className="p-5 font-black text-white">{product.price.toLocaleString()} FCFA</td>
+                <td className={`p-5 font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{product.price.toLocaleString()} FCFA</td>
                 <td className="p-5">
                   <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border ${product.stock > 0 ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
                     {product.stock} DISPO
                   </span>
                 </td>
                 <td className="p-5 text-right space-x-2">
-                  <button onClick={() => handleEdit(product)} className="text-blue-400 hover:bg-blue-500/20 p-2.5 rounded-xl transition-all">
+                  <button onClick={() => handleEdit(product)} className={`p-2.5 rounded-xl transition-all ${theme === 'dark' ? 'text-blue-400 hover:bg-blue-500/20' : 'text-blue-600 hover:bg-blue-50'}`}>
                     <Edit2 size={18} />
                   </button>
-                  <button onClick={() => setProductToDelete(product.id)} className="text-red-400 hover:bg-red-500/20 p-2.5 rounded-xl transition-all">
+                  <button onClick={() => setProductToDelete(product.id)} className={`p-2.5 rounded-xl transition-all ${theme === 'dark' ? 'text-red-400 hover:bg-red-500/20' : 'text-red-600 hover:bg-red-50'}`}>
                     <Trash2 size={18} />
                   </button>
                 </td>
@@ -320,14 +332,18 @@ const ProductManagement = () => {
       {/* Delete Confirmation Modal */}
       {productToDelete && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
-          <div className="bg-[#0a0a0a] p-8 rounded-[40px] shadow-2xl max-w-sm w-full text-center border border-white/10 animate-in zoom-in-95 duration-200">
+          <div className={`p-8 rounded-[40px] shadow-2xl max-w-sm w-full text-center border animate-in zoom-in-95 duration-200 ${
+            theme === 'dark' ? 'bg-[#0a0a0a] border-white/10' : 'bg-white border-gray-200'
+          }`}>
             <div className="bg-red-500/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
               <Trash2 size={48} className="text-red-500" />
             </div>
-            <h3 className="text-2xl font-black text-white mb-4 tracking-tight uppercase">Supprimer ?</h3>
-            <p className="text-gray-400 mb-8 leading-relaxed font-medium">Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.</p>
+            <h3 className={`text-2xl font-black mb-4 tracking-tight uppercase ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Supprimer ?</h3>
+            <p className={`mb-8 leading-relaxed font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.</p>
             <div className="flex gap-4">
-              <button onClick={() => setProductToDelete(null)} className="flex-1 px-6 py-4 bg-white/5 text-gray-500 rounded-2xl font-black hover:bg-white/10 transition-all">Annuler</button>
+              <button onClick={() => setProductToDelete(null)} className={`flex-1 px-6 py-4 rounded-2xl font-black transition-all ${
+                theme === 'dark' ? 'bg-white/5 text-gray-500 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}>Annuler</button>
               <button onClick={() => handleDelete(productToDelete)} className="flex-1 px-6 py-4 bg-red-600 text-white rounded-2xl font-black hover:bg-red-700 transition-all shadow-lg shadow-red-600/20">Supprimer</button>
             </div>
           </div>

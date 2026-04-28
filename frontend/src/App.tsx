@@ -8,7 +8,9 @@ import Checkout from './pages/Checkout';
 import Invoice from './pages/Invoice';
 import Profile from './pages/Profile';
 import { CartProvider, useCart } from './context/CartContext';
-import { ShoppingCart, User, LayoutDashboard, LogOut, Settings } from 'lucide-react';
+import { ThemeProvider } from './context/ThemeContext';
+import { ShoppingCart, User, LayoutDashboard, LogOut, Settings, Sun, Moon } from 'lucide-react';
+import { useTheme } from './context/ThemeContext';
 
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -22,6 +24,7 @@ const Navbar = () => {
   const { itemCount } = useCart();
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -47,6 +50,14 @@ const Navbar = () => {
           </div>
  
           <div className="flex items-center space-x-3">
+            <button 
+              onClick={toggleTheme}
+              className="p-2.5 text-gray-400 hover:bg-white/5 rounded-2xl transition-all border border-transparent hover:border-white/10"
+              title={`Passer en mode ${theme === 'dark' ? 'clair' : 'sombre'}`}
+            >
+              {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
+            </button>
+
             <Link to="/cart" className="relative p-2.5 text-gray-400 hover:bg-white/5 rounded-2xl transition-all border border-transparent hover:border-white/10">
               <ShoppingCart size={22} />
               {itemCount > 0 && (
@@ -89,53 +100,64 @@ const Navbar = () => {
   );
 };
 
+const AppLayout = () => {
+  const { theme } = useTheme();
+  return (
+    <div className={`min-h-screen transition-colors duration-500 ${
+      theme === 'dark' ? 'bg-[#030303] text-gray-100' : 'bg-white text-gray-900'
+    }`}>
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+      <footer className={`border-t py-20 mt-20 transition-colors duration-500 ${
+        theme === 'dark' ? 'bg-black/50 border-white/5' : 'bg-gray-50 border-gray-100'
+      }`}>
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className={`text-2xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+            TECH<span className="text-blue-500">SHOP</span>
+          </div>
+          <p className="text-gray-500 text-sm font-medium">© 2026 TechShop Premium. Expérience Tech Ultime.</p>
+          <div className="flex gap-6">
+            <a href="#" className="text-gray-500 hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="text-gray-500 hover:text-white transition-colors">GitHub</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <Routes>
-          {/* Client Routes */}
-          <Route path="/" element={
-            <div className="min-h-screen bg-[#030303]">
-              <Navbar />
-              <main>
-                <Outlet />
-              </main>
-              <footer className="bg-black/50 border-t border-white/5 py-20 mt-20">
-                <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
-                  <div className="text-2xl font-black text-white tracking-tighter">
-                    TECH<span className="text-blue-500">SHOP</span>
-                  </div>
-                  <p className="text-gray-500 text-sm font-medium">© 2026 TechShop Premium. Expérience Tech Ultime.</p>
-                  <div className="flex gap-6">
-                    <a href="#" className="text-gray-500 hover:text-white transition-colors">Twitter</a>
-                    <a href="#" className="text-gray-500 hover:text-white transition-colors">GitHub</a>
-                  </div>
-                </div>
-              </footer>
-            </div>
-          }>
-            <Route index element={<Home />} />
-            <Route path="products" element={<Products />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="invoice" element={<Invoice />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="profile" element={<Profile />} />
-          </Route>
+    <ThemeProvider>
+      <CartProvider>
+        <Router>
+          <Routes>
+            {/* Client Routes */}
+            <Route path="/" element={<AppLayout />}>
+              <Route index element={<Home />} />
+              <Route path="products" element={<Products />} />
+              <Route path="cart" element={<Cart />} />
+              <Route path="checkout" element={<Checkout />} />
+              <Route path="invoice" element={<Invoice />} />
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="products" element={<ProductManagement />} />
-            <Route path="categories" element={<CategoryManagement />} />
-            <Route path="users" element={<UserManagement />} />
-            <Route path="invoices" element={<InvoiceManagement />} />
-          </Route>
-        </Routes>
-      </Router>
-    </CartProvider>
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="products" element={<ProductManagement />} />
+              <Route path="categories" element={<CategoryManagement />} />
+              <Route path="users" element={<UserManagement />} />
+              <Route path="invoices" element={<InvoiceManagement />} />
+            </Route>
+          </Routes>
+        </Router>
+      </CartProvider>
+    </ThemeProvider>
   );
 }
 

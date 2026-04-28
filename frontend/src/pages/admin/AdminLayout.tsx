@@ -10,12 +10,16 @@ import {
   LogOut, 
   Menu, 
   X,
-  UserCircle
+  UserCircle,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -36,7 +40,9 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#030303] flex-col md:flex-row text-gray-100">
+    <div className={`flex min-h-screen flex-col md:flex-row transition-colors duration-500 ${
+      theme === 'dark' ? 'bg-[#030303] text-gray-100' : 'bg-gray-50 text-gray-900'
+    }`}>
       {/* Mobile Toggle */}
       <div className="md:hidden bg-gray-900 text-white p-4 flex justify-between items-center sticky top-0 z-50">
         <h2 className="text-xl font-black text-blue-400">TECHSHOP</h2>
@@ -70,8 +76,16 @@ const AdminLayout = () => {
           })}
           
           <button 
+            onClick={toggleTheme}
+            className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-blue-500/10 text-blue-400 transition-all duration-200 mt-4 group"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <span className="font-bold text-sm">Mode {theme === 'dark' ? 'Clair' : 'Sombre'}</span>
+          </button>
+
+          <button 
             onClick={() => { localStorage.removeItem('token'); navigate('/login'); }}
-            className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-red-500/10 text-red-400 transition-all duration-200 mt-10 group"
+            className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-red-500/10 text-red-400 transition-all duration-200 mt-2 group"
           >
             <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
             <span className="font-bold text-sm">Déconnexion</span>
@@ -80,10 +94,16 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 md:p-10 overflow-y-auto bg-[#030303] relative">
-        {/* Glow effect background */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 blur-[120px] -z-10 rounded-full"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/5 blur-[120px] -z-10 rounded-full"></div>
+      <main className={`flex-1 p-4 md:p-10 overflow-y-auto relative transition-colors duration-500 ${
+        theme === 'dark' ? 'bg-[#030303]' : 'bg-gray-100'
+      }`}>
+        {/* Glow effect background (only in dark mode) */}
+        {theme === 'dark' && (
+          <>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 blur-[120px] -z-10 rounded-full"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/5 blur-[120px] -z-10 rounded-full"></div>
+          </>
+        )}
         
         <div className="max-w-7xl mx-auto relative z-10">
           <Outlet />
