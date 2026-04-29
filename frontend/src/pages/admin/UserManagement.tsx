@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '../../context/ThemeContext';
 import { User as UserIcon, Shield, Mail } from 'lucide-react';
+import API_URL from '../../apiConfig';
 
 interface User { 
   id: number; 
@@ -17,16 +18,14 @@ const UserManagement = () => {
   const { theme } = useTheme();
 
   const fetchUsers = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    axios.get(`${apiUrl}/admin/users`).then(res => setUsers(res.data));
+    axios.get(`${API_URL}/admin/users`).then(res => setUsers(res.data));
   };
 
   useEffect(fetchUsers, []);
 
   const toggleStatus = (id: number, currentStatus: number) => {
     const newStatus = currentStatus === 1 ? 0 : 1;
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    axios.put(`${apiUrl}/admin/users/${id}/status?is_active=${newStatus}`).then(fetchUsers);
+    axios.put(`${API_URL}/admin/users/${id}/status?is_active=${newStatus}`).then(fetchUsers);
   };
 
   return (

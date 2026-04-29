@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Trash2, Package, Tag, Image as ImageIcon, Edit2, X, CheckCircle } from 'lucide-react';
+import API_URL from '../../apiConfig';
 import { useTheme } from '../../context/ThemeContext';
 
 interface Product {
@@ -28,11 +29,9 @@ const ProductManagement = () => {
   const [productToDelete, setProductToDelete] = useState<number | null>(null);
   const { theme } = useTheme();
 
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/products`);
+      const response = await axios.get(`${API_URL}/products`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -43,7 +42,7 @@ const ProductManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/categories`);
+      const response = await axios.get(`${API_URL}/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -67,7 +66,7 @@ const ProductManagement = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${apiUrl.replace('/api', '')}/api/upload`, formData, {
+      const response = await axios.post(`${API_URL.replace('/api', '')}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setForm({ ...form, image_url: response.data.url });
@@ -113,10 +112,10 @@ const ProductManagement = () => {
       };
 
       if (editingId) {
-        await axios.put(`${apiUrl}/products/${editingId}`, productData);
+        await axios.put(`${API_URL}/products/${editingId}`, productData);
         showToast("Produit mis à jour avec succès !");
       } else {
-        await axios.post(`${apiUrl}/products`, productData);
+        await axios.post(`${API_URL}/products`, productData);
         showToast("Produit ajouté avec succès !");
       }
 
@@ -145,7 +144,7 @@ const ProductManagement = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`${apiUrl}/products/${id}`);
+      await axios.delete(`${API_URL}/products/${id}`);
       setProductToDelete(null);
       fetchProducts();
       showToast("Produit supprimé avec succès !");

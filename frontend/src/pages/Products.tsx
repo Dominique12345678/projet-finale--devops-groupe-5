@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { Search, ShoppingCart, Loader2, CheckCircle, Package } from 'lucide-react';
+import API_URL from '../apiConfig';
 import { useTheme } from '../context/ThemeContext';
 
 interface Product {
@@ -38,8 +39,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-        const response = await axios.get(`${apiUrl}/products`);
+        const response = await axios.get(`${API_URL}/products`);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);

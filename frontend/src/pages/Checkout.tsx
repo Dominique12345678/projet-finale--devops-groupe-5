@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { CreditCard, Lock } from 'lucide-react';
+import API_URL from '../apiConfig';
 
 const Checkout = () => {
   const { cart, total, clearCart } = useCart();
@@ -23,7 +24,6 @@ const Checkout = () => {
     await new Promise(r => setTimeout(r, 1500));
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
       const userId = localStorage.getItem('user_id');
       const userEmail = localStorage.getItem('user_email') || 'client@email.com';
       
@@ -32,7 +32,7 @@ const Checkout = () => {
       }
 
       // Enregistrer la facture en base de données
-      const response = await axios.post(`${apiUrl}/invoices`, {
+      const response = await axios.post(`${API_URL}/invoices`, {
         user_id: parseInt(userId),
         total_amount: total
       });

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { Mail, Lock, User as UserIcon, ArrowRight, ShieldCheck } from 'lucide-react';
+import API_URL from '../apiConfig';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,9 +15,7 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
       const decoded: any = jwtDecode(credentialResponse.credential);
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      
-      const response = await axios.post(`${apiUrl}/auth/google`, {
+      const response = await axios.post(`${API_URL}/auth/google`, {
         email: decoded.email,
         full_name: decoded.name,
         google_id: decoded.sub
@@ -39,8 +38,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
+      const response = await axios.post(`${API_URL}/auth/login`, { email, password });
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('user_id', response.data.user_id.toString());
       localStorage.setItem('user_email', email);

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
-import { CheckCircle, TrendingUp, DollarSign, Users as UsersIcon, Package as PackageIcon } from 'lucide-react';
+import { CheckCircle, Users, Package, ShoppingCart, DollarSign, TrendingUp } from 'lucide-react';
+import API_URL from '../../apiConfig';
 import { useTheme } from '../../context/ThemeContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
@@ -27,8 +28,7 @@ const AdminDashboard = () => {
   }, [location]);
 
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    axios.get(`${apiUrl}/admin/stats`)
+    axios.get(`${API_URL}/admin/stats`)
       .then(res => setStats(res.data))
       .catch(err => {
         console.error(err);

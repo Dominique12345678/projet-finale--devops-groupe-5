@@ -1,6 +1,6 @@
 variable "aws_region" {
   description = "AWS region"
-  default     = "us-east-1"
+  default     = "eu-west-2"
 }
 
 variable "db_username" {

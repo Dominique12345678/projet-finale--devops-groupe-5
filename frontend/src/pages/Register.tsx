@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 import { User as UserIcon, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import API_URL from '../apiConfig';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -20,8 +21,7 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      await axios.post(`${apiUrl}/auth/register`, {
+      await axios.post(`${API_URL}/auth/register`, {
         email,
         password,
         full_name: fullName

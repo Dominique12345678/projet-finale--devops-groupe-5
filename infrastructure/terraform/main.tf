@@ -16,13 +16,15 @@ resource "aws_vpc" "main" {
   tags = { Name = "ecommerce-vpc" }
 }
 
-data "aws_availability_zones" "available" {}
+variable "availability_zones" {
+  default = ["eu-west-2a", "eu-west-2b"]
+}
 
 resource "aws_subnet" "public" {
   count             = 2
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.${count.index + 1}.0/24"
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = var.availability_zones[count.index]
   map_public_ip_on_launch = true
   tags = { Name = "ecommerce-public-${count.index + 1}" }
 }
@@ -31,7 +33,7 @@ resource "aws_subnet" "private" {
   count             = 2
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.${count.index + 10}.0/24"
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = var.availability_zones[count.index]
   tags = { Name = "ecommerce-private-${count.index + 1}" }
 }
 

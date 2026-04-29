@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CheckCircle, Tag, Trash2, Edit2, AlertCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../apiConfig';
 
 interface Category { id: number; name: string; description: string; }
 
@@ -19,25 +20,23 @@ const CategoryManagement = () => {
   };
 
   const fetchCategories = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    axios.get(`${apiUrl}/categories`).then(res => setCategories(res.data));
+    axios.get(`${API_URL}/categories`).then(res => setCategories(res.data));
   };
 
   useEffect(fetchCategories, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
     
     if (editingId) {
-      axios.put(`${apiUrl}/categories/${editingId}`, { name: newName }).then(() => {
+      axios.put(`${API_URL}/categories/${editingId}`, { name: newName }).then(() => {
         setNewName('');
         setEditingId(null);
         fetchCategories();
         showToast("Catégorie modifiée avec succès !");
       }).catch(() => showToast("Erreur lors de la modification", 'error'));
     } else {
-      axios.post(`${apiUrl}/categories`, { name: newName }).then(() => {
+      axios.post(`${API_URL}/categories`, { name: newName }).then(() => {
         setNewName('');
         fetchCategories();
         showToast("Catégorie ajoutée avec succès !");
@@ -51,8 +50,7 @@ const CategoryManagement = () => {
   };
 
   const handleDelete = (id: number) => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    axios.delete(`${apiUrl}/categories/${id}`).then(() => {
+    axios.delete(`${API_URL}/categories/${id}`).then(() => {
       setShowConfirm(null);
       fetchCategories();
       showToast("Catégorie supprimée !");

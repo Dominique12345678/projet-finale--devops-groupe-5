@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '../../context/ThemeContext';
 import { FileText, Calendar, Hash } from 'lucide-react';
+import API_URL from '../../apiConfig';
 
 interface Invoice { id: number; user_id: number; total_amount: number; status: string; created_at: string; }
 
@@ -10,8 +11,7 @@ const InvoiceManagement = () => {
   const { theme } = useTheme();
 
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    axios.get(`${apiUrl}/admin/invoices`).then(res => setInvoices(res.data));
+    axios.get(`${API_URL}/admin/invoices`).then(res => setInvoices(res.data));
   }, []);
 
   return (

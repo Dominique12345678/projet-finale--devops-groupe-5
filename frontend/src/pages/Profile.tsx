@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Save, Trash2, AlertCircle } from 'lucide-react';
+import API_URL from '../apiConfig';
 import { useTheme } from '../context/ThemeContext';
 
 const Profile = () => {
@@ -21,8 +22,7 @@ const Profile = () => {
 
     const fetchProfile = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-        const response = await axios.get(`${apiUrl}/users/${userId}`);
+        const response = await axios.get(`${API_URL}/users/${userId}`);
         setUser({ email: response.data.email, full_name: response.data.full_name || '' });
       } catch (err) {
         setError('Impossible de charger le profil');
@@ -39,8 +39,7 @@ const Profile = () => {
     setError('');
     setSuccess('');
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      await axios.put(`${apiUrl}/users/${userId}`, user);
+      await axios.put(`${API_URL}/users/${userId}`, user);
       setSuccess('Profil mis à jour avec succès !');
       localStorage.setItem('user_email', user.email);
     } catch (err) {
@@ -54,8 +53,7 @@ const Profile = () => {
     }
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      await axios.delete(`${apiUrl}/users/${userId}`);
+      await axios.delete(`${API_URL}/users/${userId}`);
       localStorage.clear();
       navigate('/login', { state: { message: 'Votre compte a été supprimé.' } });
     } catch (err) {
