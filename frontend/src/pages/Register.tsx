@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
 import { User as UserIcon, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
 import API_URL from '../apiConfig';
 
@@ -11,12 +10,6 @@ const Register = () => {
   const [fullName, setFullName] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const handleGoogleSuccess = (credentialResponse: any) => {
-    console.log("Google Registration Success:", credentialResponse);
-    localStorage.setItem('token', 'fake-google-token');
-    navigate('/');
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,26 +103,7 @@ const Register = () => {
             </button>
           </form>
 
-          {/* Google Registration Disabled as per user request
-          <div className="relative flex py-8 items-center">
-            <div className="flex-grow border-t border-white/5"></div>
-            <span className="flex-shrink mx-4 text-gray-500 text-xs font-black uppercase tracking-widest">Ou s'inscrire avec</span>
-            <div className="flex-grow border-t border-white/5"></div>
-          </div>
-
-          <div className="flex justify-center mb-10">
-            <div className="p-1 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => setError("Erreur d'inscription Google")}
-                theme="filled_black"
-                shape="pill"
-              />
-            </div>
-          </div>
-          */}
-
-          <p className="text-center text-gray-400 text-sm">
+          <p className="text-center text-gray-400 text-sm mt-8">
             Déjà membre ? <Link to="/login" className="text-purple-400 font-bold hover:text-purple-300 transition-colors underline underline-offset-4">Se connecter</Link>
           </p>
         </div>

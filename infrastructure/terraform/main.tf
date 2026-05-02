@@ -16,6 +16,11 @@ resource "aws_vpc" "main" {
   tags = { Name = "ecommerce-vpc" }
 }
 
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags   = { Name = "ecommerce-igw" }
+}
+
 variable "availability_zones" {
   default = ["eu-west-2a", "eu-west-2b"]
 }
@@ -35,6 +40,47 @@ resource "aws_subnet" "private" {
   cidr_block        = "10.0.${count.index + 10}.0/24"
   availability_zone = var.availability_zones[count.index]
   tags = { Name = "ecommerce-private-${count.index + 1}" }
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+  tags = { Name = "ecommerce-public-rt" }
+}
+
+resource "aws_route_table_association" "public" {
+  count          = 2
+  subnet_id      = aws_subnet.public[count.index].id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_eip" "nat" {
+  domain = "vpc"
+  tags   = { Name = "ecommerce-nat-eip" }
+}
+
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public[0].id
+  tags          = { Name = "ecommerce-nat-gw" }
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.main.id
+  }
+  tags = { Name = "ecommerce-private-rt" }
+}
+
+resource "aws_route_table_association" "private" {
+  count          = 2
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private.id
 }
 
 # --- Database (RDS) ---
@@ -58,7 +104,7 @@ resource "aws_security_group" "rds" {
 resource "aws_db_instance" "main" {
   allocated_storage      = 20
   engine                 = "postgres"
-  engine_version         = "15.4"
+  engine_version         = "15"
   instance_class         = "db.t3.micro"
   db_name                = "ecommerce"
   username               = var.db_username
@@ -165,7 +211,7 @@ resource "aws_lb_listener_rule" "backend" {
 
 # --- IAM Roles ---
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecommerce-ecs-task-execution-role"
+  name_prefix = "ecommerce-ecs-task-role-"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{

@@ -25,25 +25,78 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ecommerce-backend
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infrastructure/docker/backend.Dockerfile backend
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Build, tag, and push Frontend image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ecommerce-frontend
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infrastructure/docker/frontend.Dockerfile frontend
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-      - name: Update ECS Services
-        run: |
-          aws ecs update-service --cluster ecommerce-cluster --service ecommerce-backend-service --force-new-deployment
-          aws ecs update-service --cluster ecommerce-cluster --service ecommerce-frontend-service --force-new-deployment
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: 18.134.129.246
+          username: ubuntu
+          key: ${{ secrets.GROUPE5_SECRET }}
+          script: |
+            # Login to ECR
+            aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            
+            # Create project directory if it doesn't exist
+            mkdir -p ~/app
+            cd ~/app
+            
+            # Create a simple docker-compose.prod.yml that uses ECR images
+            cat <<EOF > docker-compose.yml
+            version: '3.8'
+            services:
+              db:
+                image: postgres:15-alpine
+                container_name: ecommerce_db
+                restart: always
+                environment:
+                  POSTGRES_USER: user
+                  POSTGRES_PASSWORD: password
+                  POSTGRES_DB: ecommerce
+                ports:
+                  - "5432:5432"
+                volumes:
+                  - postgres_data:/var/lib/postgresql/data
+
+              backend:
+                image: ${{ steps.login-ecr.outputs.registry }}/ecommerce-backend:latest
+                container_name: ecommerce_backend
+                restart: always
+                ports:
+                  - "8000:8000"
+                environment:
+                  - DATABASE_URL=postgresql://user:password@db:5432/ecommerce
+                depends_on:
+                  - db
+
+              frontend:
+                image: ${{ steps.login-ecr.outputs.registry }}/ecommerce-frontend:latest
+                container_name: ecommerce_frontend
+                restart: always
+                ports:
+                  - "80:80"
+                depends_on:
+                  - backend
+
+            volumes:
+              postgres_data:
+            EOF
+
+            # Pull and restart
+            docker compose pull
+            docker compose up -d
+            
+            # Cleanup old images
+            docker image prune -f

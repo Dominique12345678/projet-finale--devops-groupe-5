@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
 import { Mail, Lock, User as UserIcon, ArrowRight, ShieldCheck } from 'lucide-react';
 import API_URL from '../apiConfig';
 
@@ -11,29 +9,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const handleGoogleSuccess = async (credentialResponse: any) => {
-    try {
-      const decoded: any = jwtDecode(credentialResponse.credential);
-      const response = await axios.post(`${API_URL}/auth/google`, {
-        email: decoded.email,
-        full_name: decoded.name,
-        google_id: decoded.sub
-      });
-
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user_id', response.data.user_id.toString());
-      localStorage.setItem('user_email', decoded.email);
-      
-      if (response.data.is_admin === 1) {
-        navigate('/admin');
-      } else {
-        navigate('/products', { state: { message: "Connexion Google réussie !" } });
-      }
-    } catch (err: any) {
-      setError("Erreur lors de l'enregistrement de votre compte Google");
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,26 +90,7 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Google Login Disabled as per user request
-          <div className="relative flex py-8 items-center">
-            <div className="flex-grow border-t border-white/5"></div>
-            <span className="flex-shrink mx-4 text-gray-500 text-xs font-black uppercase tracking-widest">Ou continuer avec</span>
-            <div className="flex-grow border-t border-white/5"></div>
-          </div>
-
-          <div className="flex justify-center mb-10">
-            <div className="p-1 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => setError("Erreur d'authentification Google")}
-                theme="filled_black"
-                shape="pill"
-              />
-            </div>
-          </div>
-          */}
-
-          <p className="text-center text-gray-400 text-sm">
+          <p className="text-center text-gray-400 text-sm mt-8">
             Nouveau sur la plateforme ? <Link to="/register" className="text-blue-400 font-bold hover:text-blue-300 transition-colors underline underline-offset-4">Créer un compte</Link>
           </p>
         </div>

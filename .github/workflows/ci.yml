@@ -33,14 +33,20 @@ jobs:
         run: |
           cd backend
           pip install -r requirements.txt
-          pip install pytest "httpx<0.28.0"
+          pip install pytest httpx
+      - name: Wait for Database
+        run: |
+          until pg_isready -h localhost -p 5432 -U user; do
+            echo "Waiting for database..."
+            sleep 2
+          done
       - name: Run tests
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/ecommerce
           PYTHONPATH: .
         run: |
           cd backend
-          pytest
+          pytest -v
 
   frontend-test:
     runs-on: ubuntu-latest
