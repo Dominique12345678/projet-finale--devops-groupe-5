@@ -33,7 +33,7 @@ jobs:
         run: |
           cd backend
           pip install -r requirements.txt
-          pip install pytest httpx
+          pip install pytest "httpx==0.27.2"
       - name: Wait for Database
         run: |
           until pg_isready -h localhost -p 5432 -U user; do
