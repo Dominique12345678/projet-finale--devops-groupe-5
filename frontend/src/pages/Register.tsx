@@ -110,6 +110,7 @@ const Register = () => {
             </button>
           </form>
 
+          {/* Google Registration Disabled as per user request
           <div className="relative flex py-8 items-center">
             <div className="flex-grow border-t border-white/5"></div>
             <span className="flex-shrink mx-4 text-gray-500 text-xs font-black uppercase tracking-widest">Ou s'inscrire avec</span>
@@ -126,6 +127,7 @@ const Register = () => {
               />
             </div>
           </div>
+          */}
 
           <p className="text-center text-gray-400 text-sm">
             Déjà membre ? <Link to="/login" className="text-purple-400 font-bold hover:text-purple-300 transition-colors underline underline-offset-4">Se connecter</Link>

@@ -115,6 +115,7 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Google Login Disabled as per user request
           <div className="relative flex py-8 items-center">
             <div className="flex-grow border-t border-white/5"></div>
             <span className="flex-shrink mx-4 text-gray-500 text-xs font-black uppercase tracking-widest">Ou continuer avec</span>
@@ -131,6 +132,7 @@ const Login = () => {
               />
             </div>
           </div>
+          */}
 
           <p className="text-center text-gray-400 text-sm">
             Nouveau sur la plateforme ? <Link to="/register" className="text-blue-400 font-bold hover:text-blue-300 transition-colors underline underline-offset-4">Créer un compte</Link>
